@@ -1,0 +1,9 @@
+@Library("jenkins-libraries-v2@master")
+import com.securonix.devops.pipeline.*
+
+def templateName = "generic-docker-template"
+def branch = "master"
+def repository = "git@bitbucket.org:securonixsnypr/jenkins-pipeline-templates.git"
+
+pipeline = loadPipelineTemplate(templateName, branch, repository, '')
+pipeline.runPipeline("jenkins/workers/pipeline.yaml", '')

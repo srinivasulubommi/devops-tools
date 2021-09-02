@@ -1,0 +1,8 @@
+---
+- name: apply common configuration to all nodes
+  hosts: [master,workers]
+  gather_facts: false
+  remote_user: root
+  roles:
+    - setup-prereq
+    - setup-networking

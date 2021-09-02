@@ -1,0 +1,27 @@
+project:
+  name: jenkins_agent
+  packagingType: docker
+
+artifacts:
+  docker:
+    image:
+      path: jenkins_agent
+      tag: v2021.9
+    ecr:
+      enabled: true
+      url: 587219698707.dkr.ecr.us-east-1.amazonaws.com/
+      region: us-east-1
+      #url: 151162882430.dkr.ecr.us-west-2.amazonaws.com/
+      #env: qa
+      env: prod
+
+notification:
+  email:
+    - yjagdale@securonix.com
+    - smahale@securonix.com
+    - bpantala@securonix.com
+
+  slack:
+    channels:
+      - "#jenkins-notification"
+      - "#software-mgmt-alerts"

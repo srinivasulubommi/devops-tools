@@ -1,0 +1,31 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nexus-data
+  namespace: devops-tools
+  labels:
+    type: local
+    app: nexus
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/nexus-data/"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nexus-data-claim
+  namespace: devops-tools
+  labels:
+    app: nexus
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 300Gi

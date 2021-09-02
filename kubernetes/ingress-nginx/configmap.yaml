@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+data:
+  whitelist-source-range: 216.34.172.70/32,103.79.100.187/32
+  proxy-body-size: "2048m"
+  client-body-buffer-size: "2048m"

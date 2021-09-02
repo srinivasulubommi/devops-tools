@@ -1,0 +1,12 @@
+---
+- name: Setup pre-req
+  import_playbook: setup-prereq.yml
+
+- name: Setup Master
+  import_playbook: setup-master.yml
+
+- name: Setup Worker
+  import_playbook: setup-workers.yml
+
+- name: Test Created Cluster
+  import_playbook: test-setup.yml

@@ -1,0 +1,9 @@
+---
+- name: setup kubeadm workers
+  hosts: workers
+  vars_files:
+    - /tmp/register_command.yml
+  gather_facts: false
+  remote_user: root
+  roles:
+    - setup-worker

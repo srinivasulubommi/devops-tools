@@ -1,0 +1,45 @@
+- name: reset kubeadm
+  shell: "kubeadm reset -f"
+
+- name: initiate kubeadm
+  shell: "kubeadm init --pod-network-cidr=10.244.0.0/16"
+  register: kubeadm_output
+
+- name: Setting register_command so that they will be persisted in the fact cache
+  set_fact:
+    register_command: '{{ kubeadm_output.stdout_lines[-2][:-2] }}  {{ kubeadm_output.stdout_lines[-1] }}'
+    cacheable: yes
+
+- name: Remove Existing file
+  delegate_to: 127.0.0.1
+  run_once: true
+  file:
+    state: absent
+    path: /tmp/register_command.yml
+
+- name: Create Var files
+  delegate_to: 127.0.0.1
+  run_once: true
+  file:
+    state: touch
+    path: /tmp/register_command.yml
+
+- name: add host entries
+  run_once: true
+  delegate_to: 127.0.0.1
+  lineinfile:
+    dest: /tmp/register_command.yml
+    line: "register_command: {{ register_command }}"
+
+- name: remove existing keys
+  file:
+    state: absent
+    path: /root/.kube/config
+
+- name: copy kube config
+  ansible.builtin.shell: |
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+- name: setup node communication
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"

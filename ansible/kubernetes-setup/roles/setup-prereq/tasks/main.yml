@@ -1,0 +1,40 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+- name: Copy yum repo file
+  ansible.builtin.copy:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: install required packages
+  yum:
+    name:
+      - 'curl'
+      - 'kubelet'
+      - 'kubeadm'
+      - 'kubectl'
+    state: present
+
+- name: check docker installation status
+  shell: "which docker"
+  register: docker_output
+
+- name: Install Docker
+  shell: "curl https://releases.rancher.com/install-docker/19.03.sh | sh"
+  when: docker_output.stdout != "/usr/bin/docker"
+
+- name: enable docker
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: enable kubelet
+  ansible.builtin.systemd:
+    name: kubelet
+    state: started
+    enabled: yes
+
+- name: Copy IPTabel settings file
+  ansible.builtin.copy:
+    src: systemd-k8s.conf
+    dest: /etc/sysctl.d/k8s.conf

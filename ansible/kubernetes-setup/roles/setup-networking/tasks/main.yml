@@ -1,0 +1,45 @@
+---
+- name: Change Hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname_short }}"
+
+- name: Delete content & directory
+  file:
+    state: absent
+    path: /etc/hosts
+
+- name: Create Hosts
+  file:
+    state: touch
+    path: /etc/hosts
+
+- name: add basic nw
+  lineinfile:
+    dest: /etc/hosts
+    line: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4"
+
+- name: add basic nw localhost
+  lineinfile:
+    dest: /etc/hosts
+    line: "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6"
+
+- name: add host entries
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ hostvars[item].ansible_ssh_host }} {{ hostvars[item].inventory_hostname }} {{ hostvars[item].inventory_hostname_short }}"
+  with_items: "{{ groups.all }}"
+
+- name: Update Iptables Settings
+  shell: "sysctl --system"
+
+- name: Disable SELinux
+  shell: "setenforce 0"
+
+- name: Disable SELinux 2
+  shell: "sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config"
+
+- name: Disable Swap
+  shell: "sed -i '/swap/d' /etc/fstab"
+
+- name: make swap disable
+  shell: "swapoff -a"

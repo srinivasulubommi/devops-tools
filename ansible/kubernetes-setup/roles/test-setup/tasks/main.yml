@@ -1,0 +1,10 @@
+---
+- name: test cluster endpoint
+  shell: "kubectl get nodes"
+  register: kubectl_output
+
+- name: validating nodes status
+  ansible.builtin.debug:
+    msg:  "{{ kubectl_output.stdout }}"
+  when: kubectl_output is defined
+

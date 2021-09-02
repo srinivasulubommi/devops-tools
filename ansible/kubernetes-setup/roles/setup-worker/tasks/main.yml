@@ -1,0 +1,17 @@
+---
+
+- name: reset kubeadm
+  shell: "kubeadm reset -f"
+
+- name: checking for register_command
+  ansible.builtin.debug:
+    msg: Register Command will be 22 {{ register_command }}
+  when: register_command is defined
+
+- name: register workers
+  shell: "{{ register_command }}"
+  register: output_registration
+
+- name: registration output
+  ansible.builtin.debug:
+    msg: "{{ output_registration }}"
