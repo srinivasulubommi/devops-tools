@@ -39,7 +39,7 @@ spec:
         stage('Building Image') {
             steps{
                 script {
-                bash "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ./jenkins/workers"
+                sh "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ./jenkins/workers"
                 }
             }
         }
