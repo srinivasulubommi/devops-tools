@@ -26,12 +26,12 @@ spec:
         }
     }
     environment {
-        AWS_ACCOUNT_ID="587219698707"
+        AWS_ACCOUNT_ID="944956894329"
         AWS_DEFAULT_REGION="us-east-1" 
         IMAGE_REPO_NAME="jenkins_agent"
         IMAGE_TAG="v2021.9"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-        AWS_CREDS_ID = "jenkins-cli-secrets"
+        AWS_CREDS_ID = "jenkins-ecr-creds"
     }
    
     stages {
@@ -39,7 +39,7 @@ spec:
         stage('Building Image') {
             steps{
                 script {
-                sh "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ./jenkins/workers"
+                bash "docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} ./jenkins/workers"
                 }
             }
         }
