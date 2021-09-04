@@ -1,7 +1,6 @@
 pipeline {
     agent {
         kubernetes {
-            label jenkins
             defaultContainer 'jnlp'
             yaml """
 kind: Pod
