@@ -30,7 +30,7 @@ RUN groupadd -g ${gid} ${group} \
     && usermod -aG docker ${user} \
     && yum install -y \
        yum-utils \
-       unzip jq \
+       unzip jq which \
        wget curl ca-certificates rsync \
     && yum-config-manager \
         --add-repo \
